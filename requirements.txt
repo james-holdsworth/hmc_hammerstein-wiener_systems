@@ -1,0 +1,6 @@
+matplotlib
+numpy<2.0
+pystan<3.0.0
+scipy
+seaborn<0.14.0
+pathlib

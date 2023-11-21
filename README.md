@@ -1,0 +1,2 @@
+# hmc_hammerstein-wiener_systems
+To set up this environment, use  Python 3.7< & 3.11> and create a virtual environment in the root directory (the directory of this file). Install the required packages using `pip install -r requirements.txt`. Run `MIMO Model/hammerstein-wiener.py`. The runs that are used in the paper are stored using Git LFS in `MIMO Model/run 1` and `MIMO Model/run 2` as pickled stanfit objects.
