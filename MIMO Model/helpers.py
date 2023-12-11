@@ -415,6 +415,10 @@ def plot_bode_mimo(A_smps,B_smps,C_smps,D_smps,A_t,B_t,C_t,D_t,nu,ny,omega,no_pl
     for j in range(0,ny):
         for i in range(0,nu):
             count = 0
+            A_start = A_smps[0]
+            B_start = B_smps[0,:,[i]].reshape(n_states,-1)
+            C_start = C_smps[0,[j],:].reshape(-1,n_states)
+            D_start = D_smps[0,[j],[i]]
             for s in sel:
                 A_s = A_smps[s]
                 B_s = B_smps[s,:,[i]].reshape(n_states,-1)
@@ -424,16 +428,19 @@ def plot_bode_mimo(A_smps,B_smps,C_smps,D_smps,A_t,B_t,C_t,D_t,nu,ny,omega,no_pl
                 count = count + 1
 
             w, mag_true, phase_true = signal.dbode((A_t, B_t[:,[i]], C_t[[j],:], float(D_t[[j],[i]]),1), omega)
-
+            w, mag_start, phase_true = signal.dbode((A_start,B_start,C_start,float(D_start),1), omega)
             # plot the samples
             plt.subplot(ny, nu, plt_idx)
-            h2, = plt.semilogx(w.flatten(), mag_samples[:, 0], color='green', alpha=0.1, label='samples')  # Bode magnitude plot
-            plt.semilogx(w.flatten(), mag_samples[:, 1:no_plot], color='green', alpha=0.1)  # Bode magnitude plot
-            h1, = plt.semilogx(w.flatten(), mag_true, color='blue', label='True system')  # Bode magnitude plot
-            # hm, = plt.semilogx(w.flatten(), np.mean(mag_samples, 1), '-.', color='orange', label='mean')  # Bode magnitude plot
-            # hu, = plt.semilogx(w.flatten(), np.percentile(mag_samples, 97.5, axis=1),'--',color='orange',label='Upper CI')    # Bode magnitude plot
+            h2, = plt.semilogx(w.flatten(), mag_samples[:, 0], color='green', alpha=0.05, linewidth= 1,label='samples')  # Bode magnitude plot
+            plt.semilogx(w.flatten(), mag_samples[:, 1:no_plot], color='green', linewidth= 1,alpha=0.05)  # Bode magnitude plot
+            h1, = plt.semilogx(w.flatten(), mag_true, color='red', linewidth= 1,label='True system')  # Bode magnitude plot
+            hs, = plt.semilogx(w.flatten(), mag_start, color='blue', linewidth= 1,label='Chain start')  # Bode magnitude plot
 
-            # plt.legend(handles=[h1, h2, hm])
+            # hm, = plt.semilogx(w.flatten(), np.mean(mag_samples, 1), color='green', label='mean')  # Bode magnitude plot
+            hu, = plt.semilogx(w.flatten(), np.percentile(mag_samples, 97.5, axis=1),'--',color='orange',linewidth= 1,label='Upper CI')    # Bode magnitude plot
+            hu, = plt.semilogx(w.flatten(), np.percentile(mag_samples, 2.5, axis=1),'--',color='orange',linewidth= 1,label='Lower CI')    # Bode magnitude plot
+
+            # plt.legend(handles=[h1, h2, hs, hm])
             # plt.legend()
             # plt.title('Bode diagram')
             # plt.ylabel('Magnitude (dB)')

@@ -31,8 +31,8 @@ approx_sys = n4sid(data,4,'Feedthrough',[true,true],'DisturbanceModel','none',op
 ided_sys = pem(data,approx_sys);
 
 % sunday scaries: reduced order system! maybe it's 2nd order?
-ided_sys_o2 = pem(data,approx_sys_o2);
 approx_sys_o2 = n4sid(data,2,'Feedthrough',[true,true],'DisturbanceModel','none',opts);
+ided_sys_o2 = pem(data,approx_sys_o2);
 figure;
 bode(G);
 figure;
